@@ -15,6 +15,7 @@ const ManageClaim = () => {
     insurerComments: "",
   });
 
+  // Fetch claim details on component mount
   useEffect(() => {
     const fetchClaimDetails = async () => {
       const token = localStorage.getItem("token");
@@ -27,9 +28,7 @@ const ManageClaim = () => {
 
       try {
         const response = await axios.get(`http://localhost:3000/claims/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         });
 
         setClaim(response.data);
@@ -41,7 +40,7 @@ const ManageClaim = () => {
 
         setLoading(false);
       } catch (error) {
-        setError("Failed to fetch claim details", error);
+        setError("Failed to fetch claim details.",error);
         setLoading(false);
       }
     };
@@ -51,36 +50,37 @@ const ManageClaim = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => {
-      let newApprovedAmount = prev.approvedAmount;
 
-      if (name === "status") {
-        newApprovedAmount = value === "Approved" ? prev.approvedAmount : 0;
+    setFormData((prev) => {
+      let updatedData = { ...prev, [name]: value };
+
+      if (name === "approvedAmount") {
+        updatedData.approvedAmount = value === "" ? "" : Number(value);
       }
 
-      return {
-        ...prev,
-        [name]: name === "approvedAmount" ? Number(value) || 0 : value,
-        approvedAmount: newApprovedAmount,
-      };
+      if (name === "status" && value !== "Approved") {
+        updatedData.approvedAmount = 0;
+      }
+
+      return updatedData;
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem("token");
-
+  
     if (!token) {
       alert("No token found. Please log in again.");
       return;
     }
-
+  
     const updatedData = {
       ...claim,
       ...formData,
       approvedAmount: formData.status === "Approved" ? formData.approvedAmount : 0,
     };
-
+  
     try {
       await axios.put(`http://localhost:3000/claims/${id}`, updatedData, {
         headers: {
@@ -88,14 +88,16 @@ const ManageClaim = () => {
           "Content-Type": "application/json",
         },
       });
-
+  
       alert("Claim updated successfully!");
+  
       navigate("/insurer-dashboard");
+  
     } catch (error) {
       alert(`Error: ${error.response?.data?.message || error.message}`);
     }
   };
-
+  
   if (loading) return <p className="text-gray-700">Loading claim details...</p>;
   if (error) return <p className="text-red-500">{error}</p>;
 
@@ -109,13 +111,22 @@ const ManageClaim = () => {
         <p><strong>Claim Amount:</strong> ₹{claim.claimAmount}</p>
         <p><strong>Description:</strong> {claim.description}</p>
         <p><strong>Uploaded Document:</strong></p>
-        <img src={claim.documentUrl} alt="Uploaded Document" className="w-full max-h-60 object-contain border rounded" />
+        <img 
+          src={claim.documentUrl} 
+          alt="Uploaded Document" 
+          className="w-full max-h-60 object-contain border rounded" 
+        />
       </div>
 
       <form onSubmit={handleSubmit}>
         <label className="block mb-2">
           Status:
-          <select name="status" value={formData.status} onChange={handleChange} className="w-full p-2 border rounded">
+          <select 
+            name="status" 
+            value={formData.status} 
+            onChange={handleChange} 
+            className="w-full p-2 border rounded"
+          >
             <option value="Pending">Pending</option>
             <option value="Approved">Approved</option>
             <option value="Rejected">Rejected</option>
@@ -131,16 +142,23 @@ const ManageClaim = () => {
             onChange={handleChange}
             className="w-full p-2 border rounded"
             required
-            disabled={formData.status !== "Approved"} 
           />
         </label>
 
         <label className="block mb-2">
           Insurer Comments:
-          <textarea name="insurerComments" value={formData.insurerComments} onChange={handleChange} className="w-full p-2 border rounded"></textarea>
+          <textarea 
+            name="insurerComments" 
+            value={formData.insurerComments} 
+            onChange={handleChange} 
+            className="w-full p-2 border rounded"
+          ></textarea>
         </label>
 
-        <button type="submit" className="bg-blue-500 text-white p-2 rounded w-full mt-4">
+        <button 
+          type="submit" 
+          className="bg-blue-500 text-white p-2 rounded w-full mt-4"
+        >
           Update Claim
         </button>
       </form>

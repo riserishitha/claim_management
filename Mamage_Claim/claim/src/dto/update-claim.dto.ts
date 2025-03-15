@@ -1,4 +1,4 @@
-import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, Min, IsEmail } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, IsEmail } from 'class-validator';
 
 export class UpdateClaimDto {
   @IsNotEmpty()
@@ -11,7 +11,6 @@ export class UpdateClaimDto {
 
   @IsNotEmpty()
   @IsNumber()
-  @Min(1)
   claimAmount: number;
 
   @IsOptional()
@@ -24,7 +23,6 @@ export class UpdateClaimDto {
 
   @IsOptional()
   @IsNumber()
-  @Min(0)
   approvedAmount?: number;
 
   @IsOptional()

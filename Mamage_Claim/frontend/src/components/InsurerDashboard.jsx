@@ -38,12 +38,9 @@ const InsurerDashboard = () => {
             },
           });
 
-          if (!response.ok) {
-            throw new Error("Failed to fetch claims");
-          }
+          if (!response.ok) throw new Error("Failed to fetch claims");
 
           const data = await response.json();
-          console.log("Claims Data:", data); 
           setClaims(data);
         } catch (error) {
           setError(error.message);
@@ -54,35 +51,17 @@ const InsurerDashboard = () => {
 
       fetchClaims();
     } catch (error) {
-      console.error("Error decoding token:", error);
-      alert("Invalid token. Please login again.");
+      alert("Invalid token. Please login again.",error);
       localStorage.removeItem("token");
       navigate("/login");
     }
   }, [navigate]);
-
-
-  const formatAmount = (amount) => {
-    return new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(amount);
-  };
-
+console.log(claims,"approveee")
+  const formatAmount = (amount) => new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(amount);
 
   const getFormattedDate = (claim) => {
-    if (claim.updatedAt) {
-      return new Date(claim.updatedAt).toLocaleDateString("en-GB", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-      });
-    } else if (claim.createdAt) {
-      return new Date(claim.createdAt).toLocaleDateString("en-GB", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-      });
-    } else {
-      return "N/A";
-    }
+    const date = claim.updatedAt || claim.createdAt;
+    return date ? new Date(date).toLocaleDateString("en-GB", { day: "2-digit", month: "2-digit", year: "numeric" }) : "N/A";
   };
 
   const filteredClaims = claims.filter((claim) => {
@@ -94,52 +73,31 @@ const InsurerDashboard = () => {
     return matchesStatus && matchesStartDate && matchesEndDate;
   });
 
-  console.log(claims, "all claims")
-
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
       <h2 className="text-3xl font-bold text-blue-700 mb-6">Insurer Dashboard</h2>
-
       {error && <p className="text-red-500">{error}</p>}
-
       {loading ? (
         <p className="text-gray-700">Loading claims...</p>
       ) : (
         <>
-        
           <div className="mb-4 flex flex-wrap gap-4">
             <div>
               <label className="block text-lg font-semibold">Filter by Status:</label>
-              <select
-                value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value)}
-                className="p-2 border rounded"
-              >
+              <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)} className="p-2 border rounded">
                 <option value="All">All</option>
                 <option value="Pending">Pending</option>
                 <option value="Approved">Approved</option>
                 <option value="Rejected">Rejected</option>
               </select>
             </div>
-
             <div>
               <label className="block text-lg font-semibold">Start Date:</label>
-              <input
-                type="date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-                className="p-2 border rounded"
-              />
+              <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="p-2 border rounded" />
             </div>
-
             <div>
               <label className="block text-lg font-semibold">End Date:</label>
-              <input
-                type="date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-                className="p-2 border rounded"
-              />
+              <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className="p-2 border rounded" />
             </div>
           </div>
 
@@ -156,25 +114,21 @@ const InsurerDashboard = () => {
             <tbody>
               {filteredClaims.length > 0 ? (
                 filteredClaims.map((claim) => (
-                  <tr key={claim.id} className="border-b">
+                  <tr key={claim._id} className="border-b">
                     <td className="p-3">{getFormattedDate(claim)}</td>
                     <td className="p-3">{formatAmount(claim.claimAmount)}</td>
-                    <td className="p-3">{formatAmount(claim.approvedAmount || 0)}</td>
-                    <td className="p-3">{claim.approvedAmount ? formatAmount(claim.approvedAmount) : "Pending"}</td>
+                    <td className="p-3">{formatAmount(claim.approvedAmount||0)}</td>
+                    <td className="p-3">{claim.status || "Pending"}</td>
                     <td className="p-3">
                       <Link to={`/manage-claims/${claim._id}`}>
-                        <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-                          Review
-                        </button>
+                        <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Review</button>
                       </Link>
                     </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan="5" className="text-center p-4 text-gray-500">
-                    No claims found
-                  </td>
+                  <td colSpan="5" className="text-center p-4 text-gray-500">No claims found</td>
                 </tr>
               )}
             </tbody>

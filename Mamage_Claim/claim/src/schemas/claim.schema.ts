@@ -27,6 +27,9 @@ export class Claim {
   insurerComments: string;
 
   @Prop()
+  approvedAmount: number;
+
+  @Prop()
   documentUrl: string;
 }
 
