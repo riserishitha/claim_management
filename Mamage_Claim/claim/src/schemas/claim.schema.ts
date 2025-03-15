@@ -30,6 +30,9 @@ export class Claim {
   approvedAmount: number;
 
   @Prop()
+  patientId: string;
+
+  @Prop()
   documentUrl: string;
 }
 

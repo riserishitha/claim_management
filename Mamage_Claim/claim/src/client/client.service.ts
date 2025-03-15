@@ -6,15 +6,15 @@ import { User } from './client.schema';
 @Injectable()
 export class UserService {
   constructor(
-    @InjectModel(User.name) private userModel: Model<User>,
+    @InjectModel(User.name) private userModel: Model<User>, 
   ) {}
 
   async findByEmail(email: string): Promise<User | null> {
     return this.userModel.findOne({ email }).exec();
   }
 
-  async createUser(name: string, email: string, password: string, role: string): Promise<User> {
-    const newUser = new this.userModel({ name, email, password, role });
+  async createUser(userData: { name: string; email: string; password: string; role: string }): Promise<User> {
+    const newUser = new this.userModel(userData); 
     return newUser.save();
   }
 }

@@ -42,13 +42,27 @@ export class AppController {
     return this.appService.getClaimById(id);
   }
 
+  @Get('/patient/:patientId')
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles('patient')
+  getClaimsByPatientId(@Param('patientId') patientId: string) {
+    return this.appService.findByPatientId(patientId);
+  }
+
   @Post()
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles('patient')
   @UsePipes(new ValidationPipe({ whitelist: true }))
   async createClaim(@Body() createClaimDto: CreateClaimDto, @Req() req): Promise<Claim> {
     this.logger.log(`🔍 User Role: ${req.user?.role}, Creating Claim: ${JSON.stringify(createClaimDto)}`);
-    return this.appService.createClaim(createClaimDto);
+    console.log('Received Claim Data in Controller:', createClaimDto); // Log incoming data
+
+    if (!createClaimDto.patientId) {
+        console.error("❌ patientId is missing before passing to service");
+    }
+    const saved=this.appService.createClaim(createClaimDto);
+    console.log("Sent to Service:", saved);
+    return saved;
   }
 
   @Put(':id')
@@ -60,7 +74,7 @@ export class AppController {
     @Body() updateClaimDto: UpdateClaimDto,
     @Req() req
   ): Promise<Claim> {
-    this.logger.log(`🔍 User Role: ${req.user?.role}, Updating Claim ID: ${id}`);
+    this.logger.log(`User Role: ${req.user?.role}, Updating Claim ID: ${id}`);
     return this.appService.updateClaim(id, updateClaimDto);
   }
 

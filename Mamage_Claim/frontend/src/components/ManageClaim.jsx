@@ -15,7 +15,6 @@ const ManageClaim = () => {
     insurerComments: "",
   });
 
-  // Fetch claim details on component mount
   useEffect(() => {
     const fetchClaimDetails = async () => {
       const token = localStorage.getItem("token");

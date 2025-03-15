@@ -20,8 +20,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/start" element={<Start />} />
         <Route path="/patient-dashboard" element={<PatientDashboard />} />
-        <Route path="/submit-claim" element={<SubmitClaim />} />
-        <Route path="/view-claims" element = {<ViewClaims/>} />
+        <Route path="/submit-claim/:patientId" element={<SubmitClaim />} />
+        <Route path="/view-claims/:patientId" element = {<ViewClaims/>} />
         <Route path="/insurer-dashboard" element={<InsurerDashboard />} />
         <Route path="/manage-claims/:id" element={<ManageClaim />} />
       </Routes>

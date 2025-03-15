@@ -1,4 +1,4 @@
-import {IsEnum, IsEmail, IsNotEmpty, IsNumber, IsOptional, IsString, Min } from 'class-validator';
+import {IsEnum, IsEmail, IsNotEmpty, IsNumber, IsOptional, IsString, IsMongoId } from 'class-validator';
 import { Transform } from 'class-transformer';
 
 export class CreateClaimDto {
@@ -13,7 +13,6 @@ export class CreateClaimDto {
   @Transform(({ value }) => Number(value))
   @IsNotEmpty()
   @IsNumber()
-  @Min(1)
   claimAmount: number;
 
   @IsOptional()
@@ -26,8 +25,11 @@ export class CreateClaimDto {
 
   @IsOptional()
   @IsNumber()
-  @Min(0)
   approvedAmount?: number;
+
+  @IsOptional()
+  @IsMongoId()
+  patientId: string;
 
   @IsOptional()
   @IsString()

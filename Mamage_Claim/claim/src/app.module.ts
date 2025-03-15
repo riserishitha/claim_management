@@ -3,9 +3,10 @@ import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import * as mongoose from 'mongoose';
 import { Claim, ClaimSchema } from './schemas/claim.schema';
 import { AuthModule } from './Authentication/authenticate.module';
+import { UserModule } from './client/client.module';
+import mongoose from 'mongoose';
 
 @Module({
   imports: [
@@ -14,24 +15,26 @@ import { AuthModule } from './Authentication/authenticate.module';
     }),
     MongooseModule.forRoot(process.env.MONGO_URI as string),
     MongooseModule.forFeature([{ name: Claim.name, schema: ClaimSchema }]),
-    AuthModule, 
+    AuthModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule implements OnApplicationBootstrap {
   async onApplicationBootstrap() {
-    console.log('Connecting to DataBase');
+    console.log('Connecting to Database...');
 
-    try {
-      await mongoose.connect(process.env.MONGO_URI as string);
-      console.log('DataBase connected successfully');
-    } catch (error) {
-      console.error('DataBase connection error:', error);
-    }
+    mongoose.connection.on('connected', () => {
+      console.log('Database connected successfully');
+    });
+
+    mongoose.connection.on('error', (error) => {
+      console.error('Database connection error:', error);
+    });
 
     mongoose.connection.on('disconnected', () => {
-      console.warn('DataBase disconnected');
+      console.warn('Database disconnected');
     });
   }
 }
