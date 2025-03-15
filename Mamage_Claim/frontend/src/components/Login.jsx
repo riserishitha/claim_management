@@ -1,10 +1,14 @@
-import { useState } from 'react';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode"; 
 
 const Login = () => {
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
+
+  const navigate = useNavigate(); 
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -14,22 +18,35 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:3000/user/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("http://localhost:3000/user/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        alert('Login successful');
-        localStorage.setItem('token', data.access_token);
+        alert("Login successful");
+
+        localStorage.setItem("token", data.access_token);
+
+        const decodedToken = jwtDecode(data.access_token);
+        const userRole = decodedToken.role; 
+
+        if (userRole === "patient") {
+          navigate("/patient-dashboard");
+        } else if (userRole === "insurer") {
+          navigate("/insurer-dashboard");
+        } else {
+          alert("Invalid role. Please contact support.");
+        }
       } else {
-        alert('Invalid credentials');
+        alert("Invalid credentials");
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
+      alert("Something went wrong. Please try again.");
     }
   };
 

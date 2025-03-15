@@ -42,10 +42,7 @@ export class UserController {
 
   @Post('register')
   async register(@Body() body: { name: string; email: string; password: string; role: string }) {
-    // Create user
     const user = await this.userService.createUser(body.name, body.email, body.password, body.role);
-
-    // Generate JWT token
     const token = this.authService.generateToken({ email: user.email, role: user.role });
 
     return { user, access_token: token };
@@ -55,17 +52,12 @@ export class UserController {
   async login(@Body() body: { email: string; password: string }) {
     console.log('Login Request Received:', body);
 
-    // Find user by email
     const user = await this.userService.findByEmail(body.email);
 
-    // Validate user credentials
     if (!user || user.password !== body.password) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    // console.log(User Role:${user.role});
-
-    // Generate JWT token
     const token = this.authService.generateToken({ email: user.email, role: user.role});
     console.log('Returning Token:', token);
 

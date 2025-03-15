@@ -1,4 +1,5 @@
 import {IsEnum, IsEmail, IsNotEmpty, IsNumber, IsOptional, IsString, Min } from 'class-validator';
+import { Transform } from 'class-transformer';
 
 export class CreateClaimDto {
   @IsNotEmpty()
@@ -9,6 +10,7 @@ export class CreateClaimDto {
   @IsEmail()
   email: string;
 
+  @Transform(({ value }) => Number(value))
   @IsNotEmpty()
   @IsNumber()
   @Min(1)

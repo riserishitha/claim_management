@@ -8,6 +8,7 @@ import PatientDashboard from './components/PatientDashboard';
 import SubmitClaim from './components/SubmitClaim';
 import InsurerDashboard from './components/InsurerDashboard';
 import ViewClaims from './components/ViewClaims';
+import ManageClaim from './components/ManageClaim';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/submit-claim" element={<SubmitClaim />} />
         <Route path="/view-claims" element = {<ViewClaims/>} />
         <Route path="/insurer-dashboard" element={<InsurerDashboard />} />
+        <Route path="/manage-claims/:id" element={<ManageClaim />} />
       </Routes>
     </Router>
   );

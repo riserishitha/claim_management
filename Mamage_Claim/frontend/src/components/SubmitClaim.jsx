@@ -13,7 +13,7 @@ const submitClaim = async (claimData) => {
 
     const response = await axios.post("http://localhost:3000/claims", claimData, {
       headers: {
-        Authorization: `Bearer ${token}`,
+      "Authorization": `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     });
@@ -22,7 +22,7 @@ const submitClaim = async (claimData) => {
     return response.data;
   } catch (error) {
     console.error("🚨 Error submitting claim:", error.response?.data || error.message);
-    return null; // 🔹 Return null if there's an error
+    return null;
   }
 };
 
@@ -31,9 +31,11 @@ const SubmitClaim = () => {
   const [claimData, setClaimData] = useState({
     name: "",
     email: "",
-    amount: "",
+    claimAmount: "", 
     description: "",
   });
+
+  console.log(claimData, "claimData");
 
   const [loading, setLoading] = useState(false);
 
@@ -61,6 +63,8 @@ const SubmitClaim = () => {
       setLoading(false);
     }
   };
+
+
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
@@ -95,9 +99,9 @@ const SubmitClaim = () => {
 
           <input
             type="number"
-            name="amount"
+            name="claimAmount"
             placeholder="Claim Amount"
-            value={claimData.amount}
+            value={claimData.claimAmount}
             onChange={handleChange}
             required
             className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"

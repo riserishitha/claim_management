@@ -12,7 +12,7 @@ const images = [
 const Start = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Auto-slide effect every 5 seconds
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
@@ -31,12 +31,11 @@ const Start = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-100 to-blue-200 flex flex-col items-center text-center p-8">
-      {/* Heading */}
       <h1 className="text-4xl font-bold text-blue-700 mb-6">
         Join <span className="text-yellow-500">Insurance</span> Today!
       </h1>
 
-      {/* Buttons */}
+
       <div className="flex space-x-4 mb-6">
         <Link to="/register">
           <button className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
@@ -50,7 +49,6 @@ const Start = () => {
         </Link>
       </div>
 
-      {/* Image Carousel */}
       <div className="relative w-full max-w-3xl mt-6 overflow-hidden">
         <div className="w-full h-[320px] md:h-[420px] rounded-lg shadow-lg flex items-center justify-center bg-gray-200">
           <img
@@ -60,7 +58,6 @@ const Start = () => {
           />
         </div>
 
-        {/* Navigation Buttons */}
         <button
           onClick={prevSlide}
           className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-gray-900 text-white px-3 py-2 rounded-full shadow-md hover:bg-gray-700 transition"
@@ -75,7 +72,6 @@ const Start = () => {
         </button>
       </div>
 
-      {/* Additional Ad Section */}
       <div className="mt-8 text-center text-lg max-w-2xl">
         <p className="bg-white text-blue-900 py-3 px-6 rounded-lg shadow-md font-semibold">
           ✅ Get **lifetime coverage** with affordable premiums!  

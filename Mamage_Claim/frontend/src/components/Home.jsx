@@ -13,7 +13,6 @@ const Home = () => {
   const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Auto-slide effect every 5 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
@@ -32,7 +31,7 @@ const Home = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-blue-500 to-purple-600 text-white p-6">
-      {/* Ad Content */}
+
       <h1 className="text-4xl font-bold text-center mb-4">
         Secure Your Future with <span className="text-yellow-300">Saving Insurance</span>
       </h1>
@@ -41,7 +40,7 @@ const Home = () => {
         <span className="font-semibold"> Trusted by over 10,000+ people worldwide!</span>
       </p>
 
-      {/* "Start Now" Button → Navigates to /start */}
+
       <button
         onClick={() => navigate('/start')}
         className="bg-yellow-400 text-blue-900 px-6 py-3 rounded-lg font-semibold text-lg shadow-lg hover:bg-yellow-500 transition transform hover:scale-105"
@@ -49,7 +48,7 @@ const Home = () => {
         Start Now
       </button>
 
-      {/* Image Carousel */}
+
       <div className="relative w-full max-w-3xl mt-6 overflow-hidden">
         <div className="w-full h-[300px] md:h-[400px] rounded-lg shadow-lg flex items-center justify-center bg-gray-200">
           <img
@@ -59,7 +58,6 @@ const Home = () => {
           />
         </div>
 
-        {/* Navigation Buttons */}
         <button
           onClick={prevSlide}
           className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-gray-900 text-white px-3 py-2 rounded-full shadow-md hover:bg-gray-700 transition"

@@ -17,7 +17,6 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       const response = await fetch('http://localhost:3000/user/register', {
         method: 'POST',
@@ -28,7 +27,7 @@ const Register = () => {
       if (response.ok) {
         alert('Registration successful');
         console.log(response);
-        // Navigate based on the selected role
+
         if (formData.role === 'patient') {
           navigate('/patient-dashboard');
         } else {
