@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import * as mongoose from 'mongoose';
 import { Claim, ClaimSchema } from './schemas/claim.schema';
+import { AuthModule } from './Authentication/authenticate.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { Claim, ClaimSchema } from './schemas/claim.schema';
     }),
     MongooseModule.forRoot(process.env.MONGO_URI as string),
     MongooseModule.forFeature([{ name: Claim.name, schema: ClaimSchema }]),
+    AuthModule, 
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -25,6 +25,9 @@ export class Claim {
 
   @Prop()
   insurerComments: string;
+
+  @Prop()
+  documentUrl: string;
 }
 
 export const ClaimSchema = SchemaFactory.createForClass(Claim);

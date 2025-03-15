@@ -1,9 +1,26 @@
-import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, Min } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, Min, IsEmail } from 'class-validator';
 
 export class UpdateClaimDto {
-  @IsEnum(['Pending', 'Approved', 'Rejected'])
   @IsNotEmpty()
-  status: string;
+  @IsString()
+  name: string;
+
+  @IsNotEmpty()
+  @IsEmail()
+  email: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  @Min(1)
+  claimAmount: number;
+
+  @IsOptional()
+  @IsString()
+  description?: string;
+
+  @IsEnum(['Pending', 'Approved', 'Rejected'])
+  @IsOptional()
+  status?: string;
 
   @IsOptional()
   @IsNumber()
@@ -13,4 +30,8 @@ export class UpdateClaimDto {
   @IsOptional()
   @IsString()
   insurerComments?: string;
+
+  @IsOptional()
+  @IsString()
+  documentUrl?: string;
 }
